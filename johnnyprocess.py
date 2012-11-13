@@ -62,19 +62,17 @@ class SentimentAnalysisTest:
 
     def get_ngram_tokens(self, line):
         tokens = nltk.wordpunct_tokenize(line)
-        #message = [self.stemmer.stem(x) for x in tokens if len(x) > 2 and x not in self.stops]
-        message = [x for x in tokens if len(x) > 1 and x not in self.stops]
-        #bigram = bigrams(message)
-        #for pair in bigram:
-        #	joined = " ".join(pair)
-        #	message.append(joined)
+        message = [self.stemmer.stem(x) for x in tokens if len(x) > 2 and x not in self.stops]
+        bigram = bigrams(message)
+        for pair in bigram:
+            joined = " ".join(pair)
+            message.append(joined)
         return list(set(message))
 
 
     def learn(self):
         for line in self.training:
             self.learn_line(line)
-        #self.freq = sorted(self.freq.iteritems(), key=operator.itemgetter(1))
     
     def guess(self):
         train_size = len(self.training)
@@ -92,7 +90,6 @@ class SentimentAnalysisTest:
                 for word in matches:
                     score += math.log(train_size / self.freq[word])
 
-                #print score, nltk.pos_tag(matches)
                 set_results.append((score, trainlabel))
 
             # sort by desc by score to move top matches to the top
@@ -111,9 +108,9 @@ class SentimentAnalysisTest:
 
 sentiment = SentimentAnalysisTest()
 
-sentiment.load_positives(open(r'../lesson3/rt-polarity.pos', 'r').read())
-sentiment.load_negatives(open(r'../lesson3/rt-polarity.neg', 'r').read())
-sentiment.load_stops(open(r'../lesson3/stopwords.txt', 'r').read())
+sentiment.load_positives(open(r'rt-polarity.pos', 'r').read())
+sentiment.load_negatives(open(r'rt-polarity.neg', 'r').read())
+sentiment.load_stops(open(r'stopwords.txt', 'r').read())
 sentiment.learn()
 sentiment.guess()
 
